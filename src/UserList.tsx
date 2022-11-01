@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { User } from 'types';
+import AddFakeUser from 'AddFakeUser';
 import UserListItem from 'UserListItem';
 
 type Props = {
@@ -17,6 +18,7 @@ const UserList: FC<Props> = ({
   <div>
     <p>{count}</p>
     <button onClick={() => refetchUsers()}>Refresh Users</button>
+    <AddFakeUser />
     <ul>
       {users.map((user) => (
         <UserListItem
