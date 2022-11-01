@@ -20,3 +20,16 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+// Strictモードにおいて、開発モードではコンポーネントが2回レンダリングされる。
+// AuthorizedUserコンポーネントでGitHubからアクセス・トークンを取得する際、
+// コードが正常に渡されず、`Bad Credentials`が返却される。
+// 開発モードで正常に動作するか確認するためには、以下のコードをアンコメントして、
+// 上記のコードをコメントアウトする。
+// ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+//   <BrowserRouter>
+//     <ApolloProvider client={client}>
+//       <App />
+//     </ApolloProvider>
+//   </BrowserRouter>
+// );
