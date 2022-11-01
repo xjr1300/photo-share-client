@@ -1,36 +1,37 @@
-import { FC, useState } from 'react';
-import reactLogo from './assets/react.svg';
-import './App.css';
+import { FC } from 'react';
+
+import { gql } from 'apollo-boost';
+import { useApolloClient, useQuery } from 'react-apollo';
 
 const title = import.meta.env.VITE_APP_TITLE;
-console.dir(import.meta.env);
+
+const query = gql`
+  {
+    totalUsers
+    totalPhotos
+  }
+`;
+
+type TotalCount = {
+  totalUsers: number;
+  totalPhotos: number;
+};
 
 const App: FC = () => {
-  const [count, setCount] = useState(0);
+  const { loading, error, data } = useQuery<TotalCount>(query);
+  const client = useApolloClient();
+
+  if (loading) return <span>Loading...</span>;
+
+  console.log('cache:', client.extract());
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <p>{title}</p>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>{title}</h1>
+      <div>{JSON.stringify(data)}</div>
+      {error?.graphQLErrors.map(({ message }, i) => (
+        <span key={i}>{message}</span>
+      ))}
     </div>
   );
 };
