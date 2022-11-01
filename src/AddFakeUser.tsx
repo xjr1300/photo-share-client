@@ -1,4 +1,5 @@
 import { FC } from 'react';
+
 import { useMutation } from '@apollo/client';
 
 import { AddFakeUsersInput, AddFakeUsersResult } from 'types';
