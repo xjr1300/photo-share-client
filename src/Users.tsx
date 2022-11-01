@@ -1,26 +1,27 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from 'react';
-import { useQuery } from 'react-apollo';
+import { useQuery } from '@apollo/client';
 
 // 循環参照が気になるため、src/queries.tsxでROOT_QUERYを定義
+import { AllUsers } from 'types';
+import UserList from './UserList';
 import { ROOT_QUERY } from './queries';
-
-type User = {
-  githubLogin: string;
-  name: string;
-  avatar: string;
-};
-
-type AllUsers = {
-  totalUsers: number;
-  allUsers: User[];
-};
 
 const Users: FC = () => {
   // QueryコンポーネントをHookに変更
-  const { loading, error, data } = useQuery<AllUsers>(ROOT_QUERY);
+  const { loading, data, refetch } = useQuery<AllUsers>(ROOT_QUERY);
 
-  return <p>Users are loading: {loading ? 'yes' : 'no'}</p>;
+  return (
+    <>
+      <p>loading users...{loading ? 'yes' : 'no'}</p>
+      {!loading && (
+        <UserList
+          count={data?.totalUsers}
+          users={data?.allUsers}
+          refetchUsers={refetch}
+        />
+      )}
+    </>
+  );
 };
 
 export default Users;
