@@ -14,3 +14,13 @@ export type AddFakeUsersInput = {
 };
 
 export type AddFakeUsersResult = User[];
+
+export type GitHubAuthInput = {
+  code: string;
+};
+
+export type GitHubAuthResult = {
+  githubAuth: {
+    token: string;
+  };
+};

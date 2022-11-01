@@ -4,10 +4,17 @@ export const ROOT_QUERY = gql`
   query allUsers {
     totalUsers
     allUsers {
-      githubLogin
-      name
-      avatar
+      ...userInfo
     }
+    me {
+      ...userInfo
+    }
+  }
+
+  fragment userInfo on User {
+    githubLogin
+    name
+    avatar
   }
 `;
 
@@ -17,6 +24,14 @@ export const ADD_FAKE_USERS_MUTATION = gql`
       githubLogin
       name
       avatar
+    }
+  }
+`;
+
+export const GITHUB_AUTH_MUTATION = gql`
+  mutation githubAuth($code: String!) {
+    githubAuth(code: $code) {
+      token
     }
   }
 `;
