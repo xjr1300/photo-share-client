@@ -23,12 +23,11 @@ const App: FC = () => {
 
   if (loading) return <span>Loading...</span>;
 
-  console.log('cache:', client.extract());
-
   return (
     <div className="App">
       <h1>{title}</h1>
       <div>{JSON.stringify(data)}</div>
+      <div>{JSON.stringify(client.extract())}</div>
       {error?.graphQLErrors.map(({ message }, i) => (
         <span key={i}>{message}</span>
       ))}
