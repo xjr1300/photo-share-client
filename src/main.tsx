@@ -9,6 +9,7 @@ import {
   ApolloLink,
   concat,
 } from '@apollo/client';
+import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from 'App';
@@ -27,6 +28,20 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 
   return forward(operation);
 });
+
+const cache = new InMemoryCache();
+
+await persistCache({
+  cache,
+  storage: new LocalStorageWrapper(localStorage),
+});
+
+if (localStorage['apollo-cache-persist'] !== undefined) {
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
+  const cacheData = JSON.parse(localStorage['apollo-cache-persist']);
+  cache.restore(cacheData);
+  /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
+}
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
