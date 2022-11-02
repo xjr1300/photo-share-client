@@ -4,9 +4,10 @@ export type User = {
   avatar: string;
 };
 
-export type AllUsers = {
+export type RootQueryResult = {
   totalUsers: number;
   allUsers: User[];
+  me: User;
 };
 
 export type AddFakeUsersInput = {

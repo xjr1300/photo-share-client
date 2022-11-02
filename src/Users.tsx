@@ -2,13 +2,13 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 
 // 循環参照が気になるため、src/queries.tsxでROOT_QUERYを定義
-import { AllUsers } from 'types';
+import { RootQueryResult } from 'types';
 import UserList from './UserList';
 import { ROOT_QUERY } from './queries';
 
 const Users: FC = () => {
   // QueryコンポーネントをHookに変更
-  const { loading, data, refetch } = useQuery<AllUsers>(ROOT_QUERY);
+  const { loading, data, refetch } = useQuery<RootQueryResult>(ROOT_QUERY);
 
   return (
     <>
