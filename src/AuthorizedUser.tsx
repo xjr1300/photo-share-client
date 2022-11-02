@@ -5,16 +5,18 @@ import {
   ApolloCache,
   InMemoryCache,
   FetchResult,
+  useApolloClient,
 } from '@apollo/client';
 import { GITHUB_AUTH_MUTATION, ROOT_QUERY } from 'queries';
 import { useNavigate } from 'react-router-dom';
 
-import { GitHubAuthInput, GitHubAuthResult } from 'types';
+import { GitHubAuthInput, GitHubAuthResult, RootQueryResult } from 'types';
 import Me from 'Me';
 
 const AuthorizedUser: FC = () => {
   const [signingIn, setSigningIn] = useState(false);
   const navigate = useNavigate();
+  const client = useApolloClient();
   const [githubAuth] = useMutation<GitHubAuthResult, GitHubAuthInput>(
     GITHUB_AUTH_MUTATION
   );
@@ -67,6 +69,12 @@ const AuthorizedUser: FC = () => {
   const logout = () => {
     setSigningIn(false);
     localStorage.removeItem('token');
+    const data = client.readQuery<Omit<RootQueryResult, 'me'>>({
+      query: ROOT_QUERY,
+    });
+    if (data !== null) {
+      client.writeQuery({ query: ROOT_QUERY, data });
+    }
   };
 
   return <Me logout={logout} requestCode={requestCode} signingIn={signingIn} />;

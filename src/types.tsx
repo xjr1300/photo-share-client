@@ -14,7 +14,9 @@ export type AddFakeUsersInput = {
   count: number;
 };
 
-export type AddFakeUsersResult = User[];
+export type AddFakeUsersResult = {
+  addFakeUsers: User[];
+};
 
 export type GitHubAuthInput = {
   code: string;
