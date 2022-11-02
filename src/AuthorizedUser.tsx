@@ -11,8 +11,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { GitHubAuthInput, GitHubAuthResult } from 'types';
 
-console.log('CLIENT_ID:', import.meta.env.VITE_CLIENT_ID);
-
 const AuthorizedUser: FC = () => {
   const [signingIn, setSigningIn] = useState(false);
   const navigate = useNavigate();
@@ -22,11 +20,9 @@ const AuthorizedUser: FC = () => {
 
   const authorizationComplete = useCallback(
     (
-      cache: ApolloCache<InMemoryCache>,
+      _: ApolloCache<InMemoryCache>,
       { data }: FetchResult<GitHubAuthResult>
     ): void => {
-      console.log('authorizationComplete was started!');
-      console.log(`data: ${JSON.stringify(data)}`);
       if (data != null) {
         localStorage.setItem('token', data.githubAuth.token);
       }
@@ -43,7 +39,6 @@ const AuthorizedUser: FC = () => {
       //  ユーザーがログインした後で、ログイン画面を望ましい支払い画面に置き換えることができる。
       //  ユーザーが[戻る]ボタンをクリックしても、ユーザーはログインページを再び見ることはない。
       navigate('/', { replace: true });
-      console.log('authorizationComplete was finished!');
     },
     [navigate]
   );
