@@ -16,7 +16,6 @@ const Me: FC<Props> = ({
   signingIn = false,
 }) => {
   const { loading, data, error } = useQuery<RootQueryResult>(ROOT_QUERY);
-  console.log(`data: ${JSON.stringify(data)}`);
 
   if (!signingIn) {
     return (
