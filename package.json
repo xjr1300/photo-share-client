@@ -22,12 +22,14 @@
     "@apollo/client": "^3.7.1",
     "apollo3-cache-persist": "^0.14.1",
     "graphql": "^16.6.0",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.2"
   },
   "devDependencies": {
     "@types/eslint": "^8.4.6",
+    "@types/lodash": "^4.14.187",
     "@types/prettier": "^2.7.0",
     "@types/react": "^18.0.20",
     "@types/react-dom": "^18.0.6",
