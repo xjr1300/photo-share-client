@@ -10,6 +10,7 @@ import { GITHUB_AUTH_MUTATION, ROOT_QUERY } from 'queries';
 import { useNavigate } from 'react-router-dom';
 
 import { GitHubAuthInput, GitHubAuthResult } from 'types';
+import Me from 'Me';
 
 const AuthorizedUser: FC = () => {
   const [signingIn, setSigningIn] = useState(false);
@@ -63,11 +64,12 @@ const AuthorizedUser: FC = () => {
     window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=user`;
   };
 
-  return (
-    <button onClick={requestCode} disabled={signingIn}>
-      Sign in with GitHub
-    </button>
-  );
+  const logout = () => {
+    setSigningIn(false);
+    localStorage.removeItem('token');
+  };
+
+  return <Me logout={logout} requestCode={requestCode} signingIn={signingIn} />;
 };
 
 export default AuthorizedUser;
