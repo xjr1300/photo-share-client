@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom/client';
 
 import {
   ApolloClient,
-  InMemoryCache,
   ApolloProvider,
   HttpLink,
   ApolloLink,
   concat,
 } from '@apollo/client';
-import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist';
+import { InMemoryCache } from '@apollo/client/core';
+import { LocalStorageWrapper, persistCacheSync } from 'apollo3-cache-persist';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from 'App';
@@ -31,7 +31,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 
 const cache = new InMemoryCache();
 
-await persistCache({
+persistCacheSync({
   cache,
   storage: new LocalStorageWrapper(localStorage),
 });
