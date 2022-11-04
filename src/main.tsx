@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -6,28 +9,49 @@ import {
   ApolloProvider,
   HttpLink,
   ApolloLink,
-  concat,
+  InMemoryCache,
+  split,
 } from '@apollo/client';
-import { InMemoryCache } from '@apollo/client/core';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { getMainDefinition } from 'apollo-utilities';
 import { LocalStorageWrapper, persistCacheSync } from 'apollo3-cache-persist';
+import { OperationDefinitionNode } from 'graphql';
+import { createClient } from 'graphql-ws';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from 'App';
 
 const httpLink = new HttpLink({ uri: 'http://localhost:4000/graphql' });
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: 'ws://localhost:4000/graphql',
+  })
+);
 
-const authMiddleware = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem('token') ?? '';
-
-  operation.setContext(({ headers = {} }) => ({
+const authLink = new ApolloLink((operation, forward) => {
+  operation.setContext((context: { headers: any }) => ({
     headers: {
-      ...headers,
-      authorization: token,
+      ...context.headers,
+      authorization: localStorage.getItem('token'),
     },
   }));
 
   return forward(operation);
 });
+
+const httpAuthLink = authLink.concat(httpLink);
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(
+      query
+    ) as OperationDefinitionNode;
+
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpAuthLink
+);
 
 const cache = new InMemoryCache();
 
@@ -45,7 +69,7 @@ if (localStorage['apollo-cache-persist'] !== undefined) {
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: concat(authMiddleware, httpLink),
+  link,
 });
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
