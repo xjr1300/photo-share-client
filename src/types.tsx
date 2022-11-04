@@ -10,14 +10,6 @@ export type RootQueryResult = {
   me: User;
 };
 
-export type AddFakeUsersInput = {
-  count: number;
-};
-
-export type AddFakeUsersResult = {
-  addFakeUsers: User[];
-};
-
 export type GitHubAuthInput = {
   code: string;
 };
