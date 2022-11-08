@@ -6,6 +6,12 @@ export const ROOT_QUERY = gql`
     allUsers {
       ...userInfo
     }
+    totalPhotos
+    allPhotos {
+      id
+      name
+      url
+    }
     me {
       ...userInfo
     }
@@ -41,6 +47,26 @@ export const GITHUB_AUTH_MUTATION = gql`
   mutation githubAuth($code: String!) {
     githubAuth(code: $code) {
       token
+    }
+  }
+`;
+
+export const LISTEN_FOR_USERS = gql`
+  subscription {
+    newUser {
+      githubLogin
+      name
+      avatar
+    }
+  }
+`;
+
+export const LISTEN_FOR_PHOTOS = gql`
+  subscription {
+    newPhoto {
+      id
+      name
+      url
     }
   }
 `;
